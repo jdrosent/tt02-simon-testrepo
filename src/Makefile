@@ -6,9 +6,6 @@ COCOTB_HDL_TIMEPRECISION = 1ns
 TOPLEVEL_LANG ?= verilog
 VERILOG_SOURCES = $(PWD)/simon.v $(PWD)/tb.v
 
-yosys: VERILOG_SOURCES = $(PWD)/synth.v $(PWD)/tb.v
-yosys: all
-
 TOPLEVEL = tb
 MODULE = bench
 
