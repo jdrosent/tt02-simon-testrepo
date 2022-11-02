@@ -57,12 +57,39 @@ module simon (
 	input  wire [3:0] i_data;
 	output wire [3:0] o_data;
 
-	reg r_lfsr_rst;
-	initial r_lfsr_rst = 0;
+	assign o_data = r_round[3:0];
+
+	/* z0 Sequence */
+	wire w_z0;
 	lfsr_z0 lfsr0 (
 		.i_clk(i_clk),
 		.i_rst(i_shift),
-		.o_data(o_data[0])
+		.o_data(w_z0)
 	);
+
+	/* Key Schedule */
+	reg [63:0] r_key;
+	wire [15:0] w_temp = r_key[31:16] ^ {r_key[50:48],r_key[63:51]};	// Right circular shift
+	always @(posedge i_clk) begin
+		if (i_shift)
+			r_key <= {i_data, r_key[63:4]};
+		else begin
+			r_key[15:0] <= r_key[31:16];
+			r_key[31:16] <= r_key[47:32];
+			r_key[47:32] <= r_key[63:48];
+			r_key[63:48] <= (2**16 - 4) ^ {{15{1'b0}}, w_z0} ^ w_temp ^ r_key[15:0] ^ {w_temp[0],w_temp[15:1]};
+		end
+	end
+
+	/* Encrypt */
+	reg [31:0] r_round;
+	always @(posedge i_clk) begin
+		if (i_shift)
+			r_round <= {r_key[3:0], r_round[31:4]};
+		else begin
+			r_round[15:0] <= r_round[31:16];
+			r_round[31:16] <= (({r_round[30:16],r_round[31]} & {r_round[23:16],r_round[31:24]})) ^ {r_round[29:16],r_round[31:30]} ^ r_key[15:0] ^ r_round[15:0];
+		end
+	end
 
 endmodule

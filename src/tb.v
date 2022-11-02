@@ -19,7 +19,7 @@ module tb (
 	input  wire [3:0] i_data;
 	output wire [3:0] o_data;
 
-	simon simon (
+	simon simon0 (
 		.i_clk(i_clk),
 		.i_shift(i_shift),
 		.i_data(i_data),

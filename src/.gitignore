@@ -3,3 +3,4 @@ tb.vcd
 __pycache__/
 sim_build/
 synth.v
+test_data.json
