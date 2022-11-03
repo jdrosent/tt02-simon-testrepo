@@ -40,6 +40,12 @@ jobs:
     - name: fetch Verilog and build config
       run: ./configure.py --create-user-config
 
+    # run yosys synth because that somehow makes OpenLane work
+    - name: yosys synt
+      run: |
+        cd src
+        yosys -s synth.ysy
+
     # run OpenLane to build the GDS
     - name: make GDS
       run: >

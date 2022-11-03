@@ -41,8 +41,26 @@ async def test_simon(dut):
     rounds = test_data["rounds"]
     print("Key (Python)      Key (Verilog)     Round (Python)  Round (Verilog)")
     print("------------------------------------------------------------------")
-    for x in range(len(keys)):
+    for x in range(len(keys)-1):
         await ClockCycles(dut.i_clk, 1)
-        print(f"{keys[x]:016x}  {dut.simon0.r_key.value.integer:016x}  {rounds[x]:08x}        {dut.simon0.r_round.value.integer:08x}")
-        assert(dut.simon0.r_key.value.integer == keys[x])
-        assert(dut.simon0.r_round.value.integer == rounds[x])
+
+        dut_key = getattr(dut.simon0,"\simon0.r_key").value
+        dut_round = getattr(dut.simon0,"\simon0.r_round").value
+
+        print(f"{keys[x]:016x}  {dut_key.integer:016x}  {rounds[x]:08x}        {dut_round.integer:08x}")
+        assert(dut_key == keys[x])
+        assert(dut_round == rounds[x])
+
+    # Shift out the ciphertext
+    dut.i_shift.value = 1
+    await ClockCycles(dut.i_clk, 1)
+
+    dut_key = getattr(dut.simon0,"\simon0.r_key").value
+
+    ciphertext = 0
+    for x in range(8):
+        ciphertext += dut.o_data.value << (4*x)
+        await ClockCycles(dut.i_clk, 1)
+
+    print(f"{keys[-1]:016x}  {dut_key.integer:016x}  {rounds[-1]:08x}        {ciphertext:08x}")
+    

@@ -1,4 +1,5 @@
 read_verilog simon.v
-hierarchy -top simon
+hierarchy -top fraserbc_simon
+flatten
 synth
 write_verilog synth.v
