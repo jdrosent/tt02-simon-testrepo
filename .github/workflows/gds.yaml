@@ -72,7 +72,7 @@ jobs:
     - name: cache pdk primtives
       uses: actions/cache@v3
       with:
-        path: {{ env.PDK_ROOT }}/sky130B/libs.ref/sky130_fd_sc_hd/verilog/
+        path: ${{ env.PDK_ROOT }}/sky130B/libs.ref/sky130_fd_sc_hd/verilog/
         key: ${{ runner.os }}-primitives-${{ github.run_id }}
 
     - name: populate src cache
