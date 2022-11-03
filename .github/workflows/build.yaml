@@ -69,6 +69,12 @@ jobs:
     - name: add summary
       run: ./configure.py --get-stats >> $GITHUB_STEP_SUMMARY
 
+    - name: cache pdk primtives
+      uses: actions/cache@v3
+      with:
+        path: {{ env.PDK_ROOT }}/sky130B/libs.ref/sky130_fd_sc_hd/verilog/
+        key: ${{ runner.os }}-primitives-${{ github.run_id }}
+
     - name: populate src cache
       uses: actions/cache@v3
       with:
@@ -93,12 +99,19 @@ jobs:
     - name: install oss-cad-suite
       uses: YosysHQ/setup-oss-cad-suite@v1
 
-    # restore runs to get gate synth
+    # restore runs
     - name: restore runs cache
       uses: actions/cache@v3
       with:
         path: runs
         key: ${{ runner.os }}-runs-${{ github.run_id }}
+
+    # restore primtives
+    - name: restore runs cache
+      uses: actions/cache@v3
+      with:
+        path: primitives
+        key: ${{ runner.os }}-primitives-${{ github.run_id }}
 
     # run testbench
     - name: test
