@@ -43,8 +43,6 @@ jobs:
     # install oss fpga tools
     - name: install oss-cad-suite
       uses: YosysHQ/setup-oss-cad-suite@v1
-      with:
-        python-override: true
 
     # run yosys synth because that somehow makes OpenLane work
     - name: yosys synth
