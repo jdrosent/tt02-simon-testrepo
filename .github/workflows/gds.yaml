@@ -29,6 +29,10 @@ jobs:
         cd caravel_user_project
         make setup
 
+    # install oss fpga tools
+    - name: install oss-cad-suite
+      uses: YosysHQ/setup-oss-cad-suite@v1
+
     # need python
     - name: setup python
       uses: actions/setup-python@v4
@@ -39,10 +43,6 @@ jobs:
     # fetch the Verilog from Wokwi API
     - name: fetch Verilog and build config
       run: ./configure.py --create-user-config
-
-    # install oss fpga tools
-    - name: install oss-cad-suite
-      uses: YosysHQ/setup-oss-cad-suite@v1
 
     # run yosys synth because that somehow makes OpenLane work
     - name: yosys synth
