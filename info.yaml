@@ -20,11 +20,11 @@ documentation:
   picture:      ""
   inputs:               # a description of what the inputs do
     - clock
-    - reset
-    - none
-    - none
-    - none
-    - none
+    - shift
+    - data_in[0]
+    - data_in[1]
+    - data_in[2]
+    - data_in[3]
     - none
     - none
   outputs:

@@ -63,4 +63,6 @@ async def test_simon(dut):
         await ClockCycles(dut.i_clk, 1)
 
     print(f"{keys[-1]:016x}  {dut_key.integer:016x}  {rounds[-1]:08x}        {ciphertext:08x}")
-    
+
+    assert(keys[-1] == dut_key.integer)
+    assert(rounds[-1] == ciphertext)
