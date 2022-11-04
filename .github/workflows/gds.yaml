@@ -46,6 +46,7 @@ jobs:
         -v $PDK_ROOT:$PDK_ROOT
         -v $(pwd):/work
         -e PDK_ROOT=$PDK_ROOT
+        -e PDK=$PDK
         -u $(id -u $USER):$(id -g $USER)
         $OPENLANE_IMAGE_NAME
         /bin/bash -c "./flow.tcl -verbose 2 -overwrite -design /work/src -run_path /work/runs -tag wokwi"
