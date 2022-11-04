@@ -92,7 +92,7 @@ def get_top_module(yaml):
 
 def get_stats():
     cells = 0
-    with open('runs/wokwi/reports/synthesis/1-synthesis.AREA 0.stat.rpt') as f:
+    with open('runs/wokwi/reports/synthesis/1-synthesis.AREA_0.stat.rpt') as f:
         for line in f.readlines():
             m = re.search(r'Number of cells:\s+(\d+)', line)
             if m is not None:
