@@ -19,8 +19,7 @@ COMPILE_ARGS    += -DUNIT_DELAY=#1
 VERILOG_SOURCES += primitives/primitives.v
 VERILOG_SOURCES += primitives/sky130_fd_sc_hd.v
 
-#VERILOG_SOURCES = $(PWD)/tb.v runs/wokwi/results/final/verilog/gl/fraserbc_simon.v
-VERILOG_SOURCES += $(PWD)/tb.v $(PWD)/fraserbc_simon.v
+VERILOG_SOURCES += $(PWD)/tb.v runs/wokwi/results/final/verilog/gl/fraserbc_simon.v
 
 all: sim
 endif

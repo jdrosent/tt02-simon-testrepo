@@ -65,7 +65,7 @@ jobs:
     # for debugging, show all the files
     - name: show files
       run: find runs/wokwi/
-
+    
     - name: add summary
       run: ./configure.py --get-stats >> $GITHUB_STEP_SUMMARY
 
@@ -103,14 +103,14 @@ jobs:
     - name: restore runs cache
       uses: actions/cache@v3
       with:
-        path: runs
+        path: src/runs
         key: ${{ runner.os }}-runs-${{ github.run_id }}
 
     # restore primtives
-    - name: restore runs cache
+    - name: restore primitives cache
       uses: actions/cache@v3
       with:
-        path: primitives
+        path: src/primitives
         key: ${{ runner.os }}-primitives-${{ github.run_id }}
 
     # run testbench
