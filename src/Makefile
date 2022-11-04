@@ -8,8 +8,6 @@ TOPLEVEL_LANG ?= verilog
 # Gate Level Sim
 ifneq ($(GL),true)
 VERILOG_SOURCES = $(PWD)/tb.v $(PWD)/synth.v 
-
-all: yosys sim
 else
 COMPILE_ARGS    += -DGL_TEST
 COMPILE_ARGS    += -DFUNCTIONAL
@@ -20,15 +18,10 @@ VERILOG_SOURCES += primitives/primitives.v
 VERILOG_SOURCES += primitives/sky130_fd_sc_hd.v
 
 VERILOG_SOURCES += $(PWD)/tb.v runs/wokwi/results/final/verilog/gl/fraserbc_simon.v
-
-all: sim
 endif
 
 TOPLEVEL = tb
 MODULE = bench
-
-yosys:
-	yosys -s synth.ysy
 
 # include cocotb's make rules to take care of the simulator setup
 include $(shell cocotb-config --makefiles)/Makefile.sim
