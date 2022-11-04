@@ -29,7 +29,7 @@ jobs:
 
     # get pdk version
     - name: get pdk version
-      run: export PDK_VER=$(docker run efabless/openlane:2022.10.20 python3 dependencies/tool.py open_pdks -f commit)
+      run: echo "PDK_VER=$(docker run efabless/openlane:2022.10.20 python3 dependencies/tool.py open_pdks -f commit)" >> $GITHUB_ENV
 
     # install PDK
     - name: install pdk

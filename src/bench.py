@@ -44,8 +44,8 @@ async def test_simon(dut):
     for x in range(len(keys)-1):
         await ClockCycles(dut.i_clk, 1)
 
-        dut_key = getattr(dut.simon0,"\simon0.r_key").value
-        dut_round = getattr(dut.simon0,"\simon0.r_round").value
+        dut_key = getattr(dut.simon0,"\\simon0.r_key").value
+        dut_round = getattr(dut.simon0,"\\simon0.r_round").value
 
         print(f"{keys[x]:016x}  {dut_key.integer:016x}  {rounds[x]:08x}        {dut_round.integer:08x}")
         assert(dut_key == keys[x])
@@ -55,7 +55,7 @@ async def test_simon(dut):
     dut.i_shift.value = 1
     await ClockCycles(dut.i_clk, 1)
 
-    dut_key = getattr(dut.simon0,"\simon0.r_key").value
+    dut_key = getattr(dut.simon0,"\\simon0.r_key").value
 
     ciphertext = 0
     for x in range(8):
