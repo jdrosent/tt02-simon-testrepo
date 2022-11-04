@@ -9,12 +9,14 @@ module fraserbc_simon (
 	input  wire [7:0] io_in;
 	output wire [7:0] io_out;
 
+	assign o_data[7:4] = 4'b0;
+
 	/* Instantiate main module */
 	simon simon0 (
 		.i_clk(io_in[0]),
 		.i_shift(io_in[1]),
-		.i_data(io_in[2:5]),
-		.o_data(io_out[0:3])
+		.i_data(io_in[5:2]),
+		.o_data(io_out[3:0])
 	);
 
 endmodule
