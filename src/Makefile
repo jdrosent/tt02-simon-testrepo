@@ -7,7 +7,7 @@ TOPLEVEL_LANG ?= verilog
 
 # Gate Level Sim
 ifneq ($(GL),true)
-VERILOG_SOURCES = $(PWD)/tb.v $(PWD)/synth.v 
+VERILOG_SOURCES = $(PWD)/tb.v $(PWD)/simon.v 
 else
 COMPILE_ARGS    += -DGL_TEST
 COMPILE_ARGS    += -DFUNCTIONAL

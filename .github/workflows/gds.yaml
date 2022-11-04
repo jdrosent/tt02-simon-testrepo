@@ -43,9 +43,9 @@ jobs:
     - name: make GDS
       run: >
         docker run --rm
-        -v $PDK_ROOT:$PDK_ROOT
+        -v $PDK_ROOT:/pdk
         -v $(pwd):/work
-        -e PDK_ROOT=$PDK_ROOT
+        -e PDK_ROOT=/pdk
         -e PDK=$PDK
         -u $(id -u $USER):$(id -g $USER)
         $OPENLANE_IMAGE_NAME
@@ -54,6 +54,9 @@ jobs:
     # for debugging, show all the files
     - name: show files
       run: find runs/wokwi/
+    
+    - name: show files
+      run: find ${{ env.PDK_ROOT }}
     
     - name: add summary
       run: ./configure.py --get-stats >> $GITHUB_STEP_SUMMARY
