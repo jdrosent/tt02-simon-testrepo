@@ -9,7 +9,7 @@ module fraserbc_simon (
 	input  wire [7:0] io_in;
 	output wire [7:0] io_out;
 
-	assign o_data[7:4] = 4'b0;
+	assign io_out[7:4] = 4'b0;
 
 	/* Instantiate main module */
 	simon simon0 (
