@@ -19,18 +19,11 @@ module tb (
 	input  wire [3:0] i_data;
 	output wire [3:0] o_data;
 
-	/*
 	simon simon0 (
 		.i_clk(i_clk),
 		.i_shift(i_shift),
 		.i_data(i_data),
 		.o_data(o_data)
-	);
-	*/
-
-	fraserbc_simon simon0 (
-		.io_in({2'b00,i_data,i_shift,i_clk}),
-		.io_out({o_data})
 	);
 
 endmodule

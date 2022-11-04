@@ -105,6 +105,10 @@ jobs:
         path: primitives/
         key: ${{ runner.os }}-primitives-${{ github.run_id }}
 
+    # show files
+    - name: show files
+      run: find .
+
     # run testbench
     - name: test
       run: |
