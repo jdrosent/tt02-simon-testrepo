@@ -62,7 +62,7 @@ jobs:
       run: ./configure.py --get-stats >> $GITHUB_STEP_SUMMARY
 
     - name: copy primitives to working directory
-      run: cp ${{ env.PDK_ROOT }}/${{ PDK }}/libs.ref/sky130_fd_sc_hd/verilog/ primitives/
+      run: cp ${{ env.PDK_ROOT }}/${{ env.PDK }}/libs.ref/sky130_fd_sc_hd/verilog/ primitives/
 
     - name: cache pdk primtives
       uses: actions/cache@v3
