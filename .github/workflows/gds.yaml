@@ -36,7 +36,7 @@ jobs:
       id: cache-pdk
       uses: actions/cache@v3
       with:
-        path: /pdk
+        path: ${{ env.PDK_ROOT }}
         key: ${{ runner.os }}-pdk-${{ env.PDK_VER }}
 
     # Install PDK if not in cache
