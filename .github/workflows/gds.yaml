@@ -56,7 +56,9 @@ jobs:
       run: find runs/wokwi/
     
     - name: add summary
-      run: ./configure.py --get-stats >> $GITHUB_STEP_SUMMARY
+      run: |
+        git clone https://github.com/TinyTapeout/sssummarizer
+        sssummarizer/sssummarizer.py --gl runs/wokwi/results/final/verilog/gl/*.v --print-category >> $GITHUB_STEP_SUMMARY
 
     - name: copy primitives to working directory
       run: cp -r ${{ env.PDK_ROOT }}/${{ env.PDK }}/libs.ref/sky130_fd_sc_hd/verilog/ primitives/
@@ -145,6 +147,7 @@ jobs:
 
         gds = sorted(pathlib.Path('runs').glob('wokwi/results/final/gds/*.gds'))
         library = gdstk.read_gds(gds[-1])
+        [library.cells[x].remove(*library.cells[x].labels) for x in range(len(library.cells))]
         top_cells = library.top_level()
         top_cells[0].write_svg('gds_render.svg')
         EOF
