@@ -9,7 +9,7 @@ VERILOG_SOURCES += $(PWD)/tb.v
 
 # Gate Level Sim
 ifneq ($(GL),true)
-VERILOG_SOURCES = $(PWD)/simon.v
+VERILOG_SOURCES += $(PWD)/simon.v
 TESTCASE=test_bl
 else
 COMPILE_ARGS    += -DGL_TEST
