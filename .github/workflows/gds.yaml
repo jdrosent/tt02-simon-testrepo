@@ -116,8 +116,8 @@ jobs:
     - name: test
       run: |
         cd src
-        ln -s ../runs/ runs/
-        ls -s ../primitives/ primtives/
+        ln -s ../runs/ runs
+        ls -s ../primitives/ primtives
         python simon.py
         GL=true make
         ! grep failure results.xml
