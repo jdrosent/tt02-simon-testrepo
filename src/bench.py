@@ -9,7 +9,17 @@ import json
 with open("test_data.json", "r") as tfile:
     test_data = json.load(tfile)
 
+# Behavioural-Level Test
 @cocotb.test()
+async def test_bl(dut):
+    await test_simon(dut, gl=False)
+
+# Gate-Level Test
+@cocotb.test()
+async def test_bl(dut):
+    await test_simon(dut, gl=True)
+
+# Main Test
 async def test_simon(dut):
     # Set values initially to 0
     dut.i_shift.value = 0
