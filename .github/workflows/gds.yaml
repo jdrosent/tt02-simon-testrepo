@@ -68,7 +68,7 @@ jobs:
       uses: actions/cache@v3
       with:
         path: primitives
-        key: ${{ runner.os }}-primitives-${{ github.run_id }}
+        key: ${{ runner.os }}-primitives-${{ env.PDK_VER }}
 
     - name: populate src cache
       uses: actions/cache@v3
@@ -81,6 +81,9 @@ jobs:
       with:
         path: runs
         key: ${{ runner.os }}-runs-${{ github.run_id }}
+    
+    outputs:
+      PDK_VER: ${{ env.PDK_VER }}
 
   gl_test:
     needs: gds
@@ -106,18 +109,14 @@ jobs:
       uses: actions/cache@v3
       with:
         path: primitives
-        key: ${{ runner.os }}-primitives-${{ github.run_id }}
-
-    # show files
-    - name: show files
-      run: find .
+        key: ${{ runner.os }}-primitives-${{ needs.gds.outputs.PDK_VER }}
 
     # run testbench
     - name: test
       run: |
         cd src
         ln -s ../runs/ runs
-        ls -s ../primitives/ primtives
+        ln -s ../primitives/ primtives
         python simon.py
         GL=true make
         ! grep failure results.xml
