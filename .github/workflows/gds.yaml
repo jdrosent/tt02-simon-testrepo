@@ -61,10 +61,13 @@ jobs:
     - name: add summary
       run: ./configure.py --get-stats >> $GITHUB_STEP_SUMMARY
 
+    - name: copy primitives to working directory
+      run: cp ${{ env.PDK_ROOT }}/${{ PDK }}/libs.ref/sky130_fd_sc_hd/verilog/ primitives/
+
     - name: cache pdk primtives
       uses: actions/cache@v3
       with:
-        path: ${{ env.PDK_ROOT }}/sky130B/libs.ref/sky130_fd_sc_hd/verilog/*
+        path: primitives
         key: ${{ runner.os }}-primitives-${{ github.run_id }}
 
     - name: populate src cache
@@ -95,14 +98,14 @@ jobs:
     - name: restore runs cache
       uses: actions/cache@v3
       with:
-        path: runs/
+        path: runs
         key: ${{ runner.os }}-runs-${{ github.run_id }}
 
     # restore primtives
     - name: restore primitives cache
       uses: actions/cache@v3
       with:
-        path: primitives/
+        path: primitives
         key: ${{ runner.os }}-primitives-${{ github.run_id }}
 
     # show files
