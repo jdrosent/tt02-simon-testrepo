@@ -114,7 +114,7 @@ jobs:
         cd src
         ln -s ../runs/ runs
         ln -s ../primitives/ primtives
-        python simon.py
+        python simon.py -r
         GL=true make
         ! grep failure results.xml
 

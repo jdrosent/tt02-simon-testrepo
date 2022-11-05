@@ -1,8 +1,23 @@
 import json
+import random
+from argparse import ArgumentParser
+
+# Parse arguments
+parser = ArgumentParser()
+parser.add_argument("-v", "--verbose", dest="verbose",
+					action="store_true", default=False)
+parser.add_argument("-r", "--random", dest="random",
+					action="store_true", default=False)
+
+args = parser.parse_args()
 
 # Key & Plaintext
-key = 0x1918111009080100
-plaintext = 0x65656877
+if not args.random:
+	key = 0x1918111009080100
+	plaintext = 0x65656877
+else:
+	key = random.randint(0, 2**64)
+	plaintext = random.randint(0, 2**32)
 
 test_data = {
 	"key": key,
@@ -22,11 +37,6 @@ def left_rotate(x, d):
 def right_rotate(x, d):
     return ((x >> d) | (x << (16 - d))) & 0xFFFF
 
-# Pretty print key
-def print_key(key):
-	key = " ".join([f"{x:04x}" for x in key])
-	print(f"Key: {key}")
-
 # Generate key expansions
 key = [key >> (16*x) & 0xFFFF for x in range(3,-1,-1)]
 
@@ -42,13 +52,13 @@ for i in range(33):
 		key[2]
 	]
 
+	if args.verbose:
+		print("Key: " + " ".join([f"{x:04x}" for x in key]))
+
 	test_data["keys"].append(sum([
 		key[x] << (16*(3-x)) for x in range(0,4)
 	]))
-	print_key(key)
 	key = new_key
-
-	i += 1
 
 # Generate feistel network stages
 cur_round = [(plaintext >> (16*(1-x))) & 0xFFFF for x in range(2)]
@@ -65,7 +75,9 @@ for x in range(33):
 		cur_round[0]
 	]
 
-	print(f"Round: " + " ".join([f"{x:04x}" for x in cur_round]))
+	if args.verbose:
+		print("Round: " + " ".join([f"{x:04x}" for x in cur_round]))
+	
 	test_data["rounds"].append(sum([
 		cur_round[x] << (16*(1-x)) for x in range(2)
 	]))
