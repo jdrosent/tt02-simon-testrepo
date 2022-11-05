@@ -115,6 +115,7 @@ jobs:
         ln -s ../runs/ runs
         ln -s ../primitives/ primtives
         python simon.py -r
+        find -L .
         GL=true make
         ! grep failure results.xml
 
