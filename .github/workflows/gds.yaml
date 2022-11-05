@@ -16,31 +16,40 @@ jobs:
     # ubuntu
     runs-on: ubuntu-latest
     steps:
-    # need the repo checked out
-    - name: checkout repo
+    # Need the repo checked out
+    - name: Checkout repo
       uses: actions/checkout@v3
 
-    # need python
-    - name: setup python
+    # Need python
+    - name: Setup python
       uses: actions/setup-python@v4
       with:
         python-version: '3.7.7'
     - run: pip install requests PyYAML volare
 
-    # get pdk version
+    # Get pdk version
     - name: get pdk version
       run: echo "PDK_VER=$(docker run efabless/openlane:2022.10.20 python3 dependencies/tool.py open_pdks -f commit)" >> $GITHUB_ENV
 
-    # install PDK
-    - name: install pdk
+    # Check for cached pdk
+    - name: Check pdk cache
+      id: cache-pdk
+      uses: actions/cache@v3
+      with:
+        path: /pdk
+        key: ${{ runner.os }}-pdk-${{ env.PDK_VER }}
+
+    # Install PDK if not in cache
+    - name: Install pdk
+      if: ${{ steps.cache-pdk.outputs.cache-hit != 'true' }}
       run: volare enable --pdk sky130 $PDK_VER
 
-    # fetch the Verilog from Wokwi API
-    - name: fetch Verilog and build config
+    # Fetch the Verilog from Wokwi API
+    - name: Fetch Verilog and build config
       run: ./configure.py --create-user-config
 
-    # run OpenLane to build the GDS
-    - name: make GDS
+    # Run OpenLane to build the GDS
+    - name: Make GDS
       run: >
         docker run --rm
         -v $PDK_ROOT:/pdk
@@ -51,31 +60,27 @@ jobs:
         $OPENLANE_IMAGE_NAME
         /bin/bash -c "./flow.tcl -verbose 2 -overwrite -design /work/src -run_path /work/runs -tag wokwi"
 
-    # for debugging, show all the files
-    - name: show files
-      run: find runs/wokwi/
-    
-    - name: add summary
+    - name: Add summary
       run: |
         git clone https://github.com/TinyTapeout/sssummarizer
         sssummarizer/sssummarizer.py --gl runs/wokwi/results/final/verilog/gl/*.v --print-category >> $GITHUB_STEP_SUMMARY
 
-    - name: copy primitives to working directory
+    - name: Copy primitives to working directory
       run: cp -r ${{ env.PDK_ROOT }}/${{ env.PDK }}/libs.ref/sky130_fd_sc_hd/verilog/ primitives/
 
-    - name: cache pdk primitives
+    - name: Cache pdk primitives
       uses: actions/cache@v3
       with:
         path: primitives
         key: ${{ runner.os }}-primitives-${{ env.PDK_VER }}
 
-    - name: populate src cache
+    - name: Populate src cache
       uses: actions/cache@v3
       with:
         path: src
         key: ${{ runner.os }}-src-${{ github.run_id }}
 
-    - name: populate runs cache
+    - name: Populate runs cache
       uses: actions/cache@v3
       with:
         path: runs
@@ -89,29 +94,29 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-    - name: checkout repo
+    - name: Checkout repo
       uses: actions/checkout@v3
 
-    # install oss fpga tools
-    - name: install oss-cad-suite
+    # Install oss fpga tools
+    - name: Install oss-cad-suite
       uses: YosysHQ/setup-oss-cad-suite@v1
 
-    # restore runs
-    - name: restore runs cache
+    # Restore runs
+    - name: Restore runs cache
       uses: actions/cache@v3
       with:
         path: runs
         key: ${{ runner.os }}-runs-${{ github.run_id }}
 
-    # restore primitives
-    - name: restore primitives cache
+    # Restore primitives
+    - name: Restore primitives cache
       uses: actions/cache@v3
       with:
         path: primitives
         key: ${{ runner.os }}-primitives-${{ needs.gds.outputs.PDK_VER }}
 
-    # run testbench
-    - name: test
+    # Run testbench
+    - name: Run gate-level test
       run: |
         cd src
         ln -s ../runs/ runs
@@ -124,21 +129,21 @@ jobs:
     needs: gds
     runs-on: ubuntu-latest
     steps:
-    - name: checkout repo
+    - name: Checkout repo
       uses: actions/checkout@v3
 
-    - name: setup python
+    - name: Setup python
       uses: actions/setup-python@v4
       with:
         python-version: '3.10'
 
-    - name: restore runs cache
+    - name: Restore runs cache
       uses: actions/cache@v3
       with:
         path: runs
         key: ${{ runner.os }}-runs-${{ github.run_id }}
 
-    - name: create svg
+    - name: Create svg
       run: |
         python -m pip install gdstk
         python << EOF
@@ -152,7 +157,7 @@ jobs:
         top_cells[0].write_svg('gds_render.svg')
         EOF
 
-    - name: populate svg cache
+    - name: Populate svg cache
       uses: actions/cache@v3
       with:
         path: 'gds_render.svg'
@@ -162,17 +167,17 @@ jobs:
     needs: gds
     runs-on: ubuntu-latest
     steps:
-    - name: checkout GDS2glTF repo
+    - name: Checkout GDS2glTF repo
       uses: actions/checkout@v3
       with:
         repository: mbalestrini/GDS2glTF
 
-    - name: setup python
+    - name: Setup python
       uses: actions/setup-python@v4
       with:
         python-version: '3.10'
 
-    - name: restore runs cache
+    - name: Restore runs cache
       uses: actions/cache@v3
       with:
         path: runs
@@ -184,7 +189,7 @@ jobs:
         cp runs/wokwi/results/final/gds/*.gds tinytapeout.gds
         python3 gds2gltf.py tinytapeout.gds
 
-    - name: populate viewer cache
+    - name: Populate viewer cache
       uses: actions/cache@v3
       with:
         path: 'tinytapeout.gds.gltf'
@@ -195,19 +200,19 @@ jobs:
     - gds
     runs-on: ubuntu-latest
     steps:
-    - name: restore src cache
+    - name: Restore src cache
       uses: actions/cache@v3
       with:
         path: src
         key: ${{ runner.os }}-src-${{ github.run_id }}
 
-    - name: restore runs cache
+    - name: Restore runs cache
       uses: actions/cache@v3
       with:
         path: runs
         key: ${{ runner.os }}-runs-${{ github.run_id }}
 
-    - name: upload artifact
+    - name: Upload artifact
       uses: actions/upload-artifact@v3
       with:
           # path depends on the tag and the module name
@@ -271,7 +276,7 @@ jobs:
     needs: pages
     runs-on: ubuntu-latest
     steps:
-    - name: add gds preview
+    - name: Add gds preview
       run: |
         PAGE_URL=${{ needs.pages.outputs.page_url }}
         PAGE_URL=$(echo "$PAGE_URL" | sed -e 's/\/$//')
