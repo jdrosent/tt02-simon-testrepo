@@ -61,7 +61,7 @@ jobs:
     - name: copy primitives to working directory
       run: cp -r ${{ env.PDK_ROOT }}/${{ env.PDK }}/libs.ref/sky130_fd_sc_hd/verilog/ primitives/
 
-    - name: cache pdk primtives
+    - name: cache pdk primitives
       uses: actions/cache@v3
       with:
         path: primitives
@@ -101,7 +101,7 @@ jobs:
         path: runs
         key: ${{ runner.os }}-runs-${{ github.run_id }}
 
-    # restore primtives
+    # restore primitives
     - name: restore primitives cache
       uses: actions/cache@v3
       with:
@@ -113,10 +113,9 @@ jobs:
       run: |
         cd src
         ln -s ../runs/ runs
-        ln -s ../primitives/ primtives
+        ln -s ../primitives/ primitives
         python simon.py -r
-        find -L .
-        GL=true make
+        GL=true make -L
         ! grep failure results.xml
 
   svg:
