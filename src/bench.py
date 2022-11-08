@@ -50,8 +50,8 @@ async def test_simon(dut, gl=False):
 	keys = test_data["keys"]
 	rounds = test_data["rounds"]
 
-	print(f"Key: {keys[0]}")
-	print(f"Plaintext: {rounds[0]}")
+	print(f"Key: {keys[0]:016x}")
+	print(f"Plaintext: {rounds[0]:08x}")
 
 	# Check round and key expansions match expected
 	if not gl:
