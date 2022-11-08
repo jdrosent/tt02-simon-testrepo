@@ -81,5 +81,7 @@ async def test_simon(dut, gl=False):
 	if not gl:
 		print(f"{keys[-1]:016x}  {dut_key.integer:016x}  {rounds[-1]:08x}        {ciphertext:08x}")
 		assert(keys[-1] == dut_key.integer)
+	else:
+		print(f"{rounds[-1]:08x} {ciphertext:08x}")
 
 	assert(rounds[-1] == ciphertext)
