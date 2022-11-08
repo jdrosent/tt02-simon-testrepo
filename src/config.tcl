@@ -39,8 +39,8 @@ set ::env(FP_IO_HLENGTH) 2
 set ::env(FP_IO_VLENGTH) 2
 
 # Global Routing
-set ::env(GLB_RT_ALLOW_CONGESTION) 1
-set ::env(GLB_RT_OVERFLOW_ITERS) 400
+set ::env(GRT_ALLOW_CONGESTION) 1
+set ::env(GRT_OVERFLOW_ITERS) 400
 
 # use alternative efabless decap cells to solve LI density issue
 set ::env(DECAP_CELL) "\
