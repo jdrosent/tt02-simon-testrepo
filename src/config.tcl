@@ -31,12 +31,16 @@ set ::env(BOTTOM_MARGIN_MULT) 2
 set ::env(FP_SIZING) absolute
 set ::env(DIE_AREA) "0 0 90 120"
 set ::env(FP_CORE_UTIL) 45
-set ::env(PL_BASIC_PLACEMENT) {0}
-set ::env(PL_ROUTABILITY_DRIVEN) {1}
-set ::env(PL_TARGET_DENSITY) {0.91}
+set ::env(PL_BASIC_PLACEMENT) 0
+set ::env(PL_ROUTABILITY_DRIVEN) 1
+set ::env(PL_TARGET_DENSITY) 0.91
 
 set ::env(FP_IO_HLENGTH) 2
 set ::env(FP_IO_VLENGTH) 2
+
+# Global Routing
+set ::env(GLB_RT_ALLOW_CONGESTION) 1
+set ::env(GLB_RT_OVERFLOW_ITERS) 400
 
 # use alternative efabless decap cells to solve LI density issue
 set ::env(DECAP_CELL) "\
@@ -47,8 +51,9 @@ set ::env(DECAP_CELL) "\
     sky130_ef_sc_hd__decap_12"
 
 # clock
-set ::env(CLOCK_TREE_SYNTH) 0
-set ::env(CLOCK_PORT) ""
+set ::env(CLOCK_TREE_SYNTH) 1
+set ::env(CLOCK_PERIOD) "10000"
+set ::env(CLOCK_PORT) {io_in[0]}
 
 # don't use power rings or met5
 set ::env(DESIGN_IS_CORE) 0
