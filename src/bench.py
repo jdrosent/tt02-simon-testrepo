@@ -50,6 +50,9 @@ async def test_simon(dut, gl=False):
 	keys = test_data["keys"]
 	rounds = test_data["rounds"]
 
+	print(f"Key: {keys[0]}")
+	print(f"Plaintext: {rounds[0]}")
+
 	# Check round and key expansions match expected
 	if not gl:
 		print("Key (Python)      Key (Verilog)     Round (Python)  Round (Verilog)")
