@@ -52,7 +52,7 @@ set ::env(DECAP_CELL) "\
 
 # clock
 set ::env(CLOCK_TREE_SYNTH) 1
-set ::env(CLOCK_PERIOD) "10000"
+set ::env(CLOCK_PERIOD) "100000"
 set ::env(CLOCK_PORT) {io_in[0]}
 
 # don't use power rings or met5
