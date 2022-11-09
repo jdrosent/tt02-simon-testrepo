@@ -5,9 +5,9 @@ from cocotb.triggers import RisingEdge, FallingEdge, Timer, ClockCycles
 import struct
 import ctypes
 import json
+import random
 
-with open("test_data.json", "r") as tfile:
-	test_data = json.load(tfile)
+import simon
 
 # Behavioural-Level Test
 @cocotb.test()
@@ -19,15 +19,25 @@ async def test_bl(dut):
 async def test_gl(dut):
 	await test_simon(dut, gl=True)
 
-# Main Test
 async def test_simon(dut, gl=False):
-	# Set values initially to 0
-	dut.i_shift.value = 0
-	dut.i_data.value = 0
-
 	# DUT Clock
 	cocotb.start_soon(Clock(dut.i_clk, 2, "ns").start())
 	await ClockCycles(dut.i_clk, 2)
+	
+	# Run test 12 times
+	for x in range(64):
+		test_data = simon.get_test_data(arg_random=True)
+
+		await encrypt(dut, test_data, gl)
+
+		# Random delay
+		await ClockCycles(dut.i_clk, random.randint(0, 16))
+
+# Main Test
+async def encrypt(dut, test_data, gl):
+	# Set values initially to 0
+	dut.i_shift.value = 0
+	dut.i_data.value = 0
 	
 	# Shift in key and plaintext
 	key = test_data["key"]
@@ -86,5 +96,7 @@ async def test_simon(dut, gl=False):
 		assert(keys[-1] == dut_key.integer)
 	else:
 		print(f"{rounds[-1]:08x} {ciphertext:08x}")
+
+	dut.i_shift.value = 0
 
 	assert(rounds[-1] == ciphertext)
