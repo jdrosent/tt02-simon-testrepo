@@ -54,6 +54,7 @@ set ::env(DECAP_CELL) "\
 set ::env(CLOCK_TREE_SYNTH) 1
 set ::env(CLOCK_PERIOD) "100000"
 set ::env(CLOCK_PORT) {io_in[0]}
+set ::env(SYNTH_MAX_FANOUT) 20
 
 # don't use power rings or met5
 set ::env(DESIGN_IS_CORE) 0
